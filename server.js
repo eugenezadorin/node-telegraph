@@ -9,9 +9,9 @@ app.set('view engine', 'pug');
 app.set('views', './server/views');
 
 app.get('/', function (req, res) {
-	res.render('index');
+    res.render('index');
 });
 
 app.listen(port, () => {
-	console.log('Running on http://localhost:' + port + '/');
+    console.log('Running on http://localhost:' + port + '/');
 });
