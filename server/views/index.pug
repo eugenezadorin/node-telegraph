@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+html(lang="en")
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		meta(http-equiv="X-UA-Compatible", content="ie=edge")
+		link(rel="stylesheet", href="/static/css/normalize.css")
+		link(rel="stylesheet", href="/static/css/medium.css")
+		link(rel="stylesheet", href="/static/css/bundle.css")
+		title New post
+	body
+		.post-page
+			#post-form.post-form
+				.post-form__heading
+					h1.post-form__heading-content(contenteditable="true")
+				.post-form__author
+					.post-form__author-content(contenteditable="true")
+				.post-form__story
+					.post-form__story-content(contenteditable="true")
+		script(src="/static/js/rangy-core.js")
+		script(src="/static/js/rangy-classapplier.js")
+		script(src="/static/js/undo.js")
+		script(src="/static/js/medium.js")
+		script(src="/static/js/bundle.js?v1.0.0")

@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&subset=cyrillic');
+
+html, body {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+}
+
+.post-page {
+    width: 100%;
+    max-width: 640px;
+    margin-left: 120px;
+    margin-top: 40px;
+}
+
+.post-form [contenteditable] {
+	outline: none;
+	z-index: 2;
+    position: relative;
+}
+
+.post-form__heading {
+	position: relative;
+}
+
+.post-form__heading-content {
+    margin-bottom: 0.3em;
+}
+
+.post-form__heading-placeholder {
+    position: absolute;
+	top: 0;
+	z-index: 1;
+    font-size: 2em;
+    font-weight: bold;
+    color: #969696;
+}
+
+.post-form__author {
+	position: relative;
+	margin-bottom: 40px;
+}
+
+.post-form__author-placeholder {
+    position: absolute;
+	top: 0;
+	z-index: 1;
+    color: #969696;
+}
+
+.post-form__story {
+    position: relative;
+}
+
+.post-form__story-placeholder {
+    top: 0;
+	position: absolute;
+	z-index: 1;
+    color: #969696;
+}

@@ -1,0 +1,22 @@
+{
+  "name": "node-telegraph",
+  "version": "1.0.0",
+  "description": "Simple http://telegra.ph/ clone for educational purposes",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eugene Zadorin <mail@eugenezadorin.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.2",
+    "medium.js": "^1.0.1",
+    "normalize.css": "^7.0.0",
+    "pug": "^2.0.0-rc.4"
+  },
+  "devDependencies": {
+    "eslint": "^4.12.1",
+    "nodemon": "^1.12.1"
+  }
+}
