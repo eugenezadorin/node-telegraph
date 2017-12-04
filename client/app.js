@@ -1,6 +1,5 @@
+require('./bootstrap.js');
 const Medium = require('medium.js');
-
-window.Medium = Medium;
 
 new Medium({
     element: document.querySelector('#post-form .post-form__heading-content'),

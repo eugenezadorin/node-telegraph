@@ -1,0 +1,54 @@
+.post-page {
+    width: 100%;
+    max-width: 640px;
+    margin-left: 120px;
+    margin-top: 40px;
+}
+
+.post-form {
+    [contenteditable] {
+        outline: none;
+        z-index: 2;
+        position: relative;
+    }
+
+    &__heading {
+        position: relative;
+    }
+
+    &__heading-content {
+        margin-bottom: 0.3em;
+    }
+
+    &__heading-placeholder {
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        font-size: 2em;
+        font-weight: bold;
+        color: #969696;
+    }
+
+    &__author {
+        position: relative;
+        margin-bottom: 40px;
+    }
+
+    &__author-placeholder {
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        color: #969696;
+    }
+
+    &__story {
+        position: relative;
+    }
+
+    &__story-placeholder {
+        top: 0;
+        position: absolute;
+        z-index: 1;
+        color: #969696;
+    }
+}
