@@ -1,19 +1,30 @@
 require('./bootstrap.js');
-const Medium = require('medium.js');
+const Quill = require('quill');
 
-new Medium({
-    element: document.querySelector('#post-form .post-form__heading-content'),
+new Quill(document.querySelector('#post-form .post-form__heading-content'), {
     placeholder: 'Title',
-    mode: Medium.partialMode
+    theme: 'snow',
+    modules: {
+        toolbar: false
+    }
 });
 
-new Medium({
-    element: document.querySelector('#post-form .post-form__author-content'),
+new Quill(document.querySelector('#post-form .post-form__author-content'), {
     placeholder: 'Your name',
-    mode: Medium.inlineMode
+    theme: 'snow',
+    modules: {
+        toolbar: false
+    }
 });
 
-new Medium({
-    element: document.querySelector('#post-form .post-form__story-content'),
-    placeholder: 'Your story'
+new Quill(document.querySelector('#post-form .post-form__story-content'), {
+    placeholder: 'Your story',
+    theme: 'snow',
+    modules: {
+        toolbar: [
+            ['bold', 'italic', {size: ['large', 'normal', 'small']}], 
+            ['link', 'image', 'video'], 
+            ['code-block', 'blockquote']
+        ]
+    }
 });

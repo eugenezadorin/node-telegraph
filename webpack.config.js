@@ -1,7 +1,6 @@
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const cssnano = require('cssnano');
 
 module.exports = {
     entry: './client/app.js',

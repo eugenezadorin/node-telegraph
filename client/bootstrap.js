@@ -1,10 +1,5 @@
-window.rangy = require('rangy');
-require('rangy/lib/rangy-classapplier');
-
-window.undo = require('undo.js');
-
-window.Medium = require('medium.js');
+window.Quill = require('quill');
 
 require('normalize.css');
-require('medium.js/medium.css');
+require('quill/dist/quill.snow.css');
 require('./scss/main.scss');
