@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&subset=cyrillic');
 
+$font-sans: 'Open Sans', sans-serif;
+
 html, body {
-	font-family: 'Open Sans', sans-serif;
-	font-size: 16px;
+	font-family: $font-sans;
+	font-size: 15px;
 }
 
 @import "post.scss";

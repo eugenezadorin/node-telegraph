@@ -1,54 +1,41 @@
 .post-page {
     width: 100%;
     max-width: 640px;
-    margin-left: 120px;
-    margin-top: 40px;
+    margin: 40px 0 80px 120px;
 }
 
 .post-form {
-    [contenteditable] {
-        outline: none;
-        z-index: 2;
-        position: relative;
-    }
-
-    &__heading {
-        position: relative;
-    }
-
-    &__heading-content {
-        margin-bottom: 0.3em;
-    }
-
-    &__heading-placeholder {
-        position: absolute;
-        top: 0;
-        z-index: 1;
-        font-size: 2em;
+    .post-form__heading {
+        margin-bottom: 10px;
+        font-size: 2.2em;
         font-weight: bold;
-        color: #969696;
     }
 
-    &__author {
+    .post-form__heading.ql-container {
+        font-size: 2.2em;
+    }
+
+    .post-form__author {
         position: relative;
         margin-bottom: 40px;
     }
 
-    &__author-placeholder {
-        position: absolute;
-        top: 0;
-        z-index: 1;
-        color: #969696;
-    }
-
-    &__story {
+    .post-form__story {
         position: relative;
     }
 
-    &__story-placeholder {
-        top: 0;
-        position: absolute;
-        z-index: 1;
-        color: #969696;
+    .ql-container {
+        border: none;
+        font-family: $font-sans;
+        font-size: 1em;
+    }
+
+    .ql-editor {
+        padding: 0;
+    }
+
+    .ql-editor.ql-blank:before {
+        left: 0;
+        right: 0;
     }
 }
