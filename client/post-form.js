@@ -2,6 +2,7 @@
     if (!component) return;
 
     const Quill = require('quill');
+    const axios = require('axios');    
 
     const headingField = component.querySelector('.post-form__heading');
     const authorField = component.querySelector('.post-form__author');
@@ -34,9 +35,18 @@
 
     submitBtn.addEventListener('click', function(event){
         event.preventDefault();
-        console.log(headingEditor.root.innerHTML);
-        console.log(authorEditor.root.innerHTML);
-        console.log(storyEditor.root.innerHTML);
+        const data = {
+            title: headingEditor.getText().trim(),
+            author: authorEditor.getText().trim(),
+            story: storyEditor.root.innerHTML
+        };
+        axios.post('/save', data)
+            .then(function(response) {
+                window.location.href = response.data.url;
+            })
+            .catch(function(error){
+                console.log(error);
+            });
     });
 
 })(document.getElementById('post-form'));
