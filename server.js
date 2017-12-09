@@ -2,11 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('nedb');
 const translit = require('cyrillic-to-translit-js');
+const utils = require('./server/utils');
 
 const app = express();
 const port = 3000;
 
 const slugLen = 100;
+const codeLen = 8;
 
 const storage = new db({
     filename: './server/db/posts',
@@ -26,8 +28,8 @@ app.get('/', function (req, res) {
     res.render('index');
 });
 
-app.get('/:id/:slug', function(req, res){
-    storage.findOne({_id: req.params.id}, function(error, post){
+app.get('/:code/:slug', function(req, res){
+    storage.findOne({code: req.params.code, slug: req.params.slug}, function(error, post){
         if (post) {
             res.render('post', {
                 title: post.title,
@@ -46,16 +48,17 @@ app.post('/save', function(req, res){
         title: req.body.title,
         author: req.body.author,
         story: req.body.story,
-        slug: translit().transform(req.body.title, '-').substring(0, slugLen)
+        slug: translit().transform(req.body.title, '-').substring(0, slugLen),
+        code: utils.randString(codeLen)
     };
     storage.insert(post, function(error, newPost){
         if (error) {
             res.sendStatus(400);
         } else {
             res.json({
-                id: newPost._id,
+                code: newPost.code,
                 slug: newPost.slug,
-                url: '/' + newPost._id + '/' + newPost.slug
+                url: '/' + newPost.code + '/' + newPost.slug
             });
         }
     });

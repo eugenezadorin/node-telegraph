@@ -105,4 +105,8 @@
         right: 0;
         font-style: normal;
     }
+
+    .error .ql-editor.ql-blank:before {
+        color: rgba(255, 0, 0, .75);
+    }
 }

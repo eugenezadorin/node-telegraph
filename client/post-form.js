@@ -2,8 +2,9 @@
     if (!component) return;
 
     const Quill = require('quill');
-    const axios = require('axios');    
-
+    const axios = require('axios'); 
+    const utils = require('./utils'); 
+    
     const headingField = component.querySelector('.post-form__heading');
     const authorField = component.querySelector('.post-form__author');
     const storyField = component.querySelector('.post-form__story');
@@ -35,9 +36,35 @@
 
     submitBtn.addEventListener('click', function(event){
         event.preventDefault();
+        var errors = false;
+        if (utils.isEditorEmpty(headingEditor)) {
+            errors = true;
+            headingField.classList.add('error');
+        } else {
+            headingField.classList.remove('error');
+        }
+
+        if (utils.isEditorEmpty(authorEditor)) {
+            errors = true;
+            authorField.classList.add('error');
+        } else {
+            authorField.classList.remove('error');
+        }
+
+        if (utils.isEditorEmpty(storyEditor)) {
+            errors = true;
+            storyField.classList.add('error');
+        } else {
+            storyField.classList.remove('error');
+        }
+
+        if (errors) {
+            return false;
+        }
+
         const data = {
-            title: headingEditor.getText().trim(),
-            author: authorEditor.getText().trim(),
+            title: utils.getInlineText(headingEditor),
+            author: utils.getInlineText(authorEditor),
             story: storyEditor.root.innerHTML
         };
         axios.post('/save', data)
