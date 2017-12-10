@@ -25,17 +25,28 @@ app.set('view engine', 'pug');
 app.set('views', './server/views');
 
 app.get('/', function (req, res) {
-    res.render('index');
+    res.render('index', {title: 'New post'});
 });
 
 app.get('/:code/:slug', function(req, res){
     storage.findOne({code: req.params.code, slug: req.params.slug}, function(error, post){
         if (post) {
+            const date = new Date(post.createdAt);
+            const localDate = date.toLocaleString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: false
+            });
+            
             res.render('post', {
                 title: post.title,
                 author: post.author,
                 story: post.story,
-                date: post.createdAt
+                date: localDate,
+                date_iso: date.toISOString()
             });
         } else {
             res.sendStatus(404);

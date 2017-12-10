@@ -1,52 +1,9 @@
-<!DOCTYPE html>
-html(lang="en")
-	head
-		meta(charset="UTF-8")
-		meta(name="viewport", content="width=device-width, initial-scale=1.0")
-		meta(http-equiv="X-UA-Compatible", content="ie=edge")
-		link(rel="stylesheet", href="/static/css/bundle.css")
-		title New post
-	body
-		.post-page
-			#post-form.post-form
-				.post-form__heading
-				.post-form__author
-				.post-form__story
-					h1 Heading 1
-					h2 Heading 2
-					h3 Heading 3
-					h4 Heading 4
-					h5 Heading 5
-					h6 Heading 6
-					p 
-						| Lorem ipsum, 
-						a(href="#") dolor sit amet 
-						| consectetur adipisicing elit. Sint nobis, ex reiciendis recusandae ad reprehenderit qui deleniti est dolores. Ea alias impedit incidunt unde numquam. Magnam, quo ipsa. Incidunt, enim.
-					p 
-						| Lorem ipsum 
-						strong dolor sit amet 
-						| consectetur adipisicing elit. Voluptatum dignissimos neque deserunt corporis nesciunt soluta eveniet numquam, quos, eum nemo, enim accusantium minima velit aliquam debitis temporibus! Ad, animi corporis!
-					p 
-						| Lorem ipsum 
-						em dolor sit amet 
-						| consectetur adipisicing elit. Asperiores illo at esse quod sint magni, velit laboriosam unde delectus quam exercitationem deleniti expedita beatae ipsa nisi. Adipisci asperiores magnam quia.
-					blockquote
-						p A block quotation (also known as a long quotation or extract) is a quotation in a written document, that is set off from the main text as a paragraph, or block of text.
-					iframe(width="560", height="315", src="https://www.youtube.com/embed/AHrCI9eSJGQ", frameborder="0", gesture="media", allow="encrypted-media" allowfullscreen)
-					pre
-						| let a = 6;
-						| console.log(a);
-					p 
-						img(src="https://placeimg.com/640/480/tech" alt="")
-					h3 Ordered List
-					ol
-						li List Item 1
-						li List Item 2
-						li List Item 3
-					h3 Unordered List
-					ul 
-						li List Item 1
-						li List Item 2
-						li List Item 3
-				button.post-form__publish Publish
-		script(src="/static/js/bundle.js")
+extends layout.pug
+block content
+	.post-page
+		#post-form.post-form
+			.post-form__heading
+			.post-form__author
+			.post-form__story
+			button.post-form__publish Publish
+		
