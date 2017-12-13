@@ -6,8 +6,11 @@ block content
                 .ql-editor #{title}
             .post-form__author.ql-container.ql-snow 
                 .ql-editor
-                    p #{author} 
-                        span &bull; 
+                    p #{author}
+                        span &bull;
                         time(datetime=date_iso) #{date}
+                        if can_edit
+                            span &bull;
+                            a(href=edit_url) Edit post
             .post-form__story.ql-container.ql-snow
                 .ql-editor !{story}

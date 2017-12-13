@@ -12,6 +12,7 @@
     const authorField = component.querySelector('.post-form__author');
     const storyField = component.querySelector('.post-form__story');
     const submitBtn = component.querySelector('.post-form__publish');
+    const postCode = component.dataset.postCode;
 
     const initEditor = function (element, options, autosaveKey) {
         const editor = new Quill(element, options);
@@ -87,11 +88,14 @@
             return false;
         }
 
-        const data = {
+        var data = {
             title: utils.getInlineText(headingEditor),
             author: utils.getInlineText(authorEditor),
             story: storyEditor.root.innerHTML
         };
+        if (postCode) {
+            data.code = postCode;
+        }
         axios.post('/save', data)
             .then(function(response) {
                 window.localStorage.removeItem('latest_title');
