@@ -1,8 +1,9 @@
 extends layout.pug
 block content
-	.post-page
-		#post-form.post-form(data-post-code=code)
-			.post-form__heading #{title}
-			.post-form__author #{author}
-			.post-form__story !{story}
-			button.post-form__publish Save
+    .post-page
+        #post-form.post-form(data-post-code=code)
+            include toolbar.pug
+            .post-form__heading #{title}
+            .post-form__author #{author}
+            .post-form__story !{story}
+            button.post-form__publish Save

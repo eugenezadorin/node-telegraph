@@ -1,9 +1,10 @@
 extends layout.pug
 block content
-	.post-page
-		#post-form.post-form
-			.post-form__heading
-			.post-form__author
-			.post-form__story
-			button.post-form__publish Publish
-		
+    .post-page
+        #post-form.post-form
+            include toolbar.pug
+            .post-form__heading
+            .post-form__author
+            .post-form__story
+            button.post-form__publish Publish
+        

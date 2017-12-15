@@ -12,7 +12,18 @@
     const authorField = component.querySelector('.post-form__author');
     const storyField = component.querySelector('.post-form__story');
     const submitBtn = component.querySelector('.post-form__publish');
+    const toolbar = component.querySelector('.post-form__toolbar');
     const postCode = component.dataset.postCode;
+
+    const inlineEditorKeyboardBehavior = {
+        bindings: {
+            tab: {
+                handler: function() {
+                    return true;
+                }
+            }
+        }
+    };
 
     const initEditor = function (element, options, autosaveKey) {
         const editor = new Quill(element, options);
@@ -28,6 +39,36 @@
             window.localStorage.setItem(autosaveKey, JSON.stringify(editor.getContents()));
         }, autosaveDelay));
 
+        if (options && options.modules && options.modules.toolbar) {
+            editor.on('selection-change', function(range) {
+                if (range) {
+                    if (range.length == 0) {
+                        toolbar.style.visibility = 'hidden';
+                        toolbar.style.left = '0';
+                        toolbar.style.top = '0';
+                    } else {
+                        const selectionBounds = editor.getBounds(range);
+                        const editorBounds = element.getBoundingClientRect();
+                        const toolbarBounds = toolbar.getBoundingClientRect();
+
+                        var toolbarLeft = window.pageYOffset + editorBounds.left + selectionBounds.left;
+                        toolbarLeft += ((selectionBounds.right - selectionBounds.left) / 2);
+                        toolbarLeft -= (toolbarBounds.width / 2);
+
+                        var toolbarTop = window.pageYOffset + editorBounds.top + selectionBounds.top - toolbarBounds.height - 5;
+
+                        toolbar.style.top = toolbarTop + 'px';
+                        toolbar.style.left = toolbarLeft + 'px';
+                        toolbar.style.visibility = 'visible';
+                    }
+                } else {
+                    toolbar.style.visibility = 'hidden';
+                    toolbar.style.left = '0';
+                    toolbar.style.top = '0';
+                }
+            });
+        }
+
         return editor;
     };
 
@@ -35,7 +76,8 @@
         placeholder: 'Title',
         theme: 'snow',
         modules: {
-            toolbar: false
+            toolbar: false,
+            keyboard: inlineEditorKeyboardBehavior
         }
     }, 'latest_title');
 
@@ -43,7 +85,8 @@
         placeholder: 'Your name',
         theme: 'snow',
         modules: {
-            toolbar: false
+            toolbar: false,
+            keyboard: inlineEditorKeyboardBehavior
         }
     }, 'latest_author');
 
@@ -51,7 +94,9 @@
         placeholder: 'Your story',
         theme: 'snow',
         modules: {
-            toolbar: false
+            toolbar: {
+                container: toolbar
+            }
         }
     }, 'latest_story');
 
