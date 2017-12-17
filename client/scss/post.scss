@@ -32,6 +32,24 @@
         padding: 6px 4px;
         visibility: hidden;
 
+        .post-form__toolbar-heading-icon {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .post-form__toolbar-heading-icon-index {
+            font-size: 11px;
+            vertical-align: sub;
+        }
+
+        @for $i from 1 through 6 {
+            .ql-header[value="#{$i}"] {
+                .post-form__toolbar-heading-icon-index:after {
+                    content: "#{$i}";
+                }
+            }
+        }
+
         .ql-stroke {
             stroke: #f1f1f1;
         }
@@ -47,6 +65,9 @@
             background-color: rgba(208, 208, 208, 1);
             .ql-stroke {
                 stroke: #000;
+            }
+            .post-form__toolbar-heading-icon {
+                color: #000;
             }
         }
     }

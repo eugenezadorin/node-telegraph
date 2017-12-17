@@ -15,6 +15,9 @@
     const toolbar = component.querySelector('.post-form__toolbar');
     const postCode = component.dataset.postCode;
 
+    var icons = Quill.import('ui/icons');
+    icons['header'] = '<span class="post-form__toolbar-heading-icon">H<span class="post-form__toolbar-heading-icon-index"></span>';
+
     const inlineEditorKeyboardBehavior = {
         bindings: {
             tab: {
@@ -39,17 +42,19 @@
             window.localStorage.setItem(autosaveKey, JSON.stringify(editor.getContents()));
         }, autosaveDelay));
 
-        if (options && options.modules && options.modules.toolbar) {
+        if (options && options.modules && options.modules.toolbar && options.modules.toolbar.container) {
+            const _toolbar = options.modules.toolbar.container;
+
             editor.on('selection-change', function(range) {
                 if (range) {
                     if (range.length == 0) {
-                        toolbar.style.visibility = 'hidden';
-                        toolbar.style.left = '0';
-                        toolbar.style.top = '0';
+                        _toolbar.style.visibility = 'hidden';
+                        _toolbar.style.left = '0';
+                        _toolbar.style.top = '0';
                     } else {
                         const selectionBounds = editor.getBounds(range);
                         const editorBounds = element.getBoundingClientRect();
-                        const toolbarBounds = toolbar.getBoundingClientRect();
+                        const toolbarBounds = _toolbar.getBoundingClientRect();
 
                         var toolbarLeft = window.pageYOffset + editorBounds.left + selectionBounds.left;
                         toolbarLeft += ((selectionBounds.right - selectionBounds.left) / 2);
@@ -57,14 +62,14 @@
 
                         var toolbarTop = window.pageYOffset + editorBounds.top + selectionBounds.top - toolbarBounds.height - 5;
 
-                        toolbar.style.top = toolbarTop + 'px';
-                        toolbar.style.left = toolbarLeft + 'px';
-                        toolbar.style.visibility = 'visible';
+                        _toolbar.style.top = toolbarTop + 'px';
+                        _toolbar.style.left = toolbarLeft + 'px';
+                        _toolbar.style.visibility = 'visible';
                     }
                 } else {
-                    toolbar.style.visibility = 'hidden';
-                    toolbar.style.left = '0';
-                    toolbar.style.top = '0';
+                    _toolbar.style.visibility = 'hidden';
+                    _toolbar.style.left = '0';
+                    _toolbar.style.top = '0';
                 }
             });
         }
@@ -94,8 +99,8 @@
         placeholder: 'Your story',
         theme: 'snow',
         modules: {
-            toolbar: {
-                container: toolbar
+            toolbar: { 
+                container: toolbar 
             }
         }
     }, 'latest_story');
