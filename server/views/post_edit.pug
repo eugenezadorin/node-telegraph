@@ -1,9 +1,9 @@
 extends layout.pug
 block content
     .post-page
-        #post-form.post-form(data-post-code=code)
+        #post-form.post-form(data-post-code=post.code)
             include toolbar.pug
-            .post-form__heading #{title}
-            .post-form__author #{author}
-            .post-form__story !{story}
+            .post-form__heading #{post.title}
+            .post-form__author #{post.author}
+            .post-form__story !{post.story}
             button.post-form__publish Save

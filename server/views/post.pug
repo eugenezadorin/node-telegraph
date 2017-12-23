@@ -3,14 +3,14 @@ block content
     .post-page
         .post-form
             h1.post-form__heading.ql-container.ql-snow 
-                .ql-editor #{title}
+                .ql-editor #{post.title}
             .post-form__author.ql-container.ql-snow 
                 .ql-editor
-                    p #{author}
+                    p #{post.author}
                         span &bull;
-                        time(datetime=date_iso) #{date}
-                        if can_edit
+                        time(datetime=post.createdAt) #{post.createdAtLocale}
+                        if canEdit
                             span &bull;
-                            a(href=edit_url) Edit post
+                            a(href=post.editUrl()) Edit post
             .post-form__story.ql-container.ql-snow
-                .ql-editor !{story}
+                .ql-editor !{post.story}
