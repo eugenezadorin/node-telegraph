@@ -5,6 +5,7 @@
     const axios = require('axios'); 
     const debounce = require('debounce');
     const utils = require('./utils'); 
+    const icons = require('./icons');
 
     const autosaveDelay = 500;
     
@@ -15,8 +16,16 @@
     const toolbar = component.querySelector('.post-form__toolbar');
     const postCode = component.dataset.postCode;
 
-    var icons = Quill.import('ui/icons');
-    icons['header'] = '<span class="post-form__toolbar-heading-icon">H<span class="post-form__toolbar-heading-icon-index"></span>';
+    var qIcons = Quill.import('ui/icons');
+    qIcons['bold'] = icons.bold;
+    qIcons['italic'] = icons.italic;
+    qIcons['link'] = icons.link;
+    qIcons['blockquote'] = icons.quote;
+    qIcons['code-block'] = icons.code;
+    qIcons['header'][2] = icons.h2;
+    qIcons['header'][3] = icons.h3;
+    qIcons['image'] = icons.camera;
+    qIcons['video'] = icons.play;
 
     const inlineEditorKeyboardBehavior = {
         bindings: {

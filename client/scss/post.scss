@@ -32,43 +32,22 @@
         padding: 6px 4px;
         visibility: hidden;
 
-        .post-form__toolbar-heading-icon {
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .post-form__toolbar-heading-icon-index {
-            font-size: 11px;
-            vertical-align: sub;
-        }
-
-        @for $i from 1 through 6 {
-            .ql-header[value="#{$i}"] {
-                .post-form__toolbar-heading-icon-index:after {
-                    content: "#{$i}";
-                }
-            }
-        }
-
-        .ql-stroke {
-            stroke: #f1f1f1;
-        }
-
         button {
             border-radius: 3px;
             background-color: rgba(208, 208, 208, 0);
             transition: background-color .2s ease-out;
             margin: 0 2px;
+            padding: 3px;
+            color: #f1f1f1;
+
+            svg {
+                float: none;
+            }
         }
 
         button:hover, button:focus, button.ql-active {
             background-color: rgba(208, 208, 208, 1);
-            .ql-stroke {
-                stroke: #000;
-            }
-            .post-form__toolbar-heading-icon {
-                color: #000;
-            }
+            color: #000;
         }
     }
 
