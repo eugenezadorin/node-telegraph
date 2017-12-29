@@ -14,6 +14,7 @@
     const storyField = component.querySelector('.post-form__story');
     const submitBtn = component.querySelector('.post-form__publish');
     const toolbar = component.querySelector('.post-form__toolbar');
+    const toolbarMedia = component.querySelector('.post-form__media-toolbar');
     const postCode = component.dataset.postCode;
 
     var qIcons = Quill.import('ui/icons');
@@ -54,13 +55,54 @@
         if (options && options.modules && options.modules.toolbar && options.modules.toolbar.container) {
             const _toolbar = options.modules.toolbar.container;
 
+            editor.on('text-change', function(){
+                setTimeout(function(){
+                    try {
+                        const range = editor.getSelection();
+                        if (range && range.length == 0) {
+                            const selectionBounds = editor.getBounds(range);
+                            const line = editor.getLine(range.index);
+                            if (line[0].domNode.innerText.trim().length === 0) {
+                                const editorBounds = element.getBoundingClientRect();
+                                var toolbarTop = window.pageYOffset + editorBounds.top + selectionBounds.top + 2;
+                                toolbarMedia.style.top = toolbarTop + 'px';
+                                toolbarMedia.style.visibility = 'visible';
+                            } else {
+                                toolbarMedia.style.visibility = 'hidden';
+                            }
+                        } else {
+                            toolbarMedia.style.visibility = 'hidden';
+                        }
+                    } catch (err) {
+                        toolbarMedia.style.visibility = 'hidden';
+                    }
+                }, 0);
+            });
+
             editor.on('selection-change', function(range) {
                 if (range) {
                     if (range.length == 0) {
                         _toolbar.style.visibility = 'hidden';
                         _toolbar.style.left = '0';
                         _toolbar.style.top = '0';
+
+                        try {
+                            const selectionBounds = editor.getBounds(range);
+                            const line = editor.getLine(range.index);
+                            if (line[0].domNode.innerText.trim().length === 0) {
+                                const editorBounds = element.getBoundingClientRect();
+                                var toolbarTop = window.pageYOffset + editorBounds.top + selectionBounds.top + 2;
+                                toolbarMedia.style.top = toolbarTop + 'px';
+                                toolbarMedia.style.visibility = 'visible';
+                            } else {
+                                toolbarMedia.style.visibility = 'hidden';
+                            }
+                        } catch (err) {
+                            toolbarMedia.style.visibility = 'hidden';
+                        }
                     } else {
+                        toolbarMedia.style.visibility = 'hidden';
+
                         const selectionBounds = editor.getBounds(range);
                         const editorBounds = element.getBoundingClientRect();
                         const toolbarBounds = _toolbar.getBoundingClientRect();
@@ -76,6 +118,7 @@
                         _toolbar.style.visibility = 'visible';
                     }
                 } else {
+                    toolbarMedia.style.visibility = 'hidden';
                     _toolbar.style.visibility = 'hidden';
                     _toolbar.style.left = '0';
                     _toolbar.style.top = '0';
