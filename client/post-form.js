@@ -15,6 +15,8 @@
     const submitBtn = component.querySelector('.post-form__publish');
     const toolbar = component.querySelector('.post-form__toolbar');
     const toolbarMedia = component.querySelector('.post-form__toolbar-media');
+    const toolbarMediaImageBtn = toolbarMedia.querySelector('.post-form__toolbar-media-image');
+    const fileInput = component.querySelector('.post-form__file');
     const postCode = component.dataset.postCode;
 
     var qIcons = Quill.import('ui/icons');
@@ -140,6 +142,30 @@
             }
         }
     }, 'latest_story');
+
+
+    toolbarMediaImageBtn.addEventListener('click', function(event){
+        event.preventDefault();
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function(){
+        if (fileInput.files.length === 1) {
+            var data = new FormData();
+            data.append('file', fileInput.files[0]);
+            axios.post('/upload', data)
+                .then(function(response) {
+                    console.log(response);
+                    fileInput.value = null;
+                })
+                .catch(function(error){
+                    console.log(error);
+                    fileInput.value = null;
+                });
+        } else {
+            fileInput.value = null;
+        }
+    });
 
 
     const validateForm = function() {

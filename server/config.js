@@ -11,5 +11,13 @@ module.exports = {
     userCookieLen: 128,
 
     /** User cookie expires in one year */
-    userCookieLifetime:  3600 * 24 * 365 * 1000
+    userCookieLifetime:  3600 * 24 * 365 * 1000,
+
+    fileMaxSize: 12 * 1024 * 1024,
+
+    /** Maximal count of files in request. No multiple uploads allowed. */
+    fileMaxUploads: 1,
+
+    /** Length of random name for saved files */
+    fileNameLen: 32,
 };

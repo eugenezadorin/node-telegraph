@@ -2,3 +2,5 @@
 .env
 node_modules
 server/db/posts
+server/upload/*
+!server/upload/.gitkeep

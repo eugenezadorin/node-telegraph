@@ -2,6 +2,7 @@ const app = require('./bootstrap');
 const crypto = require('crypto');
 const config = require('./config');
 const Post = require('./post');
+const mime = require('mime/lite');
 
 app.use(function(req, res, next){
     var userId = req.signedCookies[ config.userCookieName ];
@@ -97,6 +98,37 @@ app.post('/save', function(req, res){
             }
         });
     }
+});
+
+app.post('/upload', function(req, res){
+    if (!req.files) {
+        return res.sendStatus(400);
+    }
+
+    const file = req.files.file;
+    
+    /** @todo check REAL mimetype with mmmagic - https://github.com/mscdex/mmmagic */
+    if (file.mimetype.indexOf('image/') != 0) {
+        return res.sendStatus(400);
+    }
+
+    const ext = mime.getExtension(file.mimetype);
+    if (!ext) {
+        return res.sendStatus(400);
+    }
+
+    const fileName = crypto.pseudoRandomBytes( config.fileNameLen / 2 ).toString('hex') + '.' + ext;
+
+    const serverPath = './server/upload/' + fileName;
+    const publicPath = '/file/' + fileName;
+
+    file.mv(serverPath, function(error){
+        if (error) {
+            return res.sendStatus(500);
+        } else {
+            return res.json({path: publicPath});
+        }
+    });
 });
 
 module.exports = app;
