@@ -14,19 +14,15 @@
     const storyField = component.querySelector('.post-form__story');
     const submitBtn = component.querySelector('.post-form__publish');
     const toolbar = component.querySelector('.post-form__toolbar');
-    const toolbarMedia = component.querySelector('.post-form__media-toolbar');
+    const toolbarMedia = component.querySelector('.post-form__toolbar-media');
     const postCode = component.dataset.postCode;
 
     var qIcons = Quill.import('ui/icons');
-    qIcons['bold'] = icons.bold;
-    qIcons['italic'] = icons.italic;
-    qIcons['link'] = icons.link;
-    qIcons['blockquote'] = icons.quote;
-    qIcons['code-block'] = icons.code;
     qIcons['header'][2] = icons.h2;
     qIcons['header'][3] = icons.h3;
-    qIcons['image'] = icons.camera;
-    qIcons['video'] = icons.play;
+
+    toolbarMedia.querySelector('.post-form__toolbar-media-image').innerHTML = icons.camera;
+    toolbarMedia.querySelector('.post-form__toolbar-media-video').innerHTML = icons.play;
 
     const inlineEditorKeyboardBehavior = {
         bindings: {
@@ -57,52 +53,19 @@
 
             editor.on('text-change', function(){
                 setTimeout(function(){
-                    try {
-                        const range = editor.getSelection();
-                        if (range && range.length == 0) {
-                            const selectionBounds = editor.getBounds(range);
-                            const line = editor.getLine(range.index);
-                            if (line[0].domNode.innerText.trim().length === 0) {
-                                const editorBounds = element.getBoundingClientRect();
-                                var toolbarTop = window.pageYOffset + editorBounds.top + selectionBounds.top + 2;
-                                toolbarMedia.style.top = toolbarTop + 'px';
-                                toolbarMedia.style.visibility = 'visible';
-                            } else {
-                                toolbarMedia.style.visibility = 'hidden';
-                            }
-                        } else {
-                            toolbarMedia.style.visibility = 'hidden';
-                        }
-                    } catch (err) {
-                        toolbarMedia.style.visibility = 'hidden';
-                    }
+                    toggleToolbarMedia(editor, toolbarMedia);
                 }, 0);
             });
 
             editor.on('selection-change', function(range) {
+                toggleToolbarMedia(editor, toolbarMedia);
+
                 if (range) {
                     if (range.length == 0) {
                         _toolbar.style.visibility = 'hidden';
                         _toolbar.style.left = '0';
                         _toolbar.style.top = '0';
-
-                        try {
-                            const selectionBounds = editor.getBounds(range);
-                            const line = editor.getLine(range.index);
-                            if (line[0].domNode.innerText.trim().length === 0) {
-                                const editorBounds = element.getBoundingClientRect();
-                                var toolbarTop = window.pageYOffset + editorBounds.top + selectionBounds.top + 2;
-                                toolbarMedia.style.top = toolbarTop + 'px';
-                                toolbarMedia.style.visibility = 'visible';
-                            } else {
-                                toolbarMedia.style.visibility = 'hidden';
-                            }
-                        } catch (err) {
-                            toolbarMedia.style.visibility = 'hidden';
-                        }
                     } else {
-                        toolbarMedia.style.visibility = 'hidden';
-
                         const selectionBounds = editor.getBounds(range);
                         const editorBounds = element.getBoundingClientRect();
                         const toolbarBounds = _toolbar.getBoundingClientRect();
@@ -118,7 +81,6 @@
                         _toolbar.style.visibility = 'visible';
                     }
                 } else {
-                    toolbarMedia.style.visibility = 'hidden';
                     _toolbar.style.visibility = 'hidden';
                     _toolbar.style.left = '0';
                     _toolbar.style.top = '0';
@@ -128,6 +90,28 @@
 
         return editor;
     };
+
+    function toggleToolbarMedia(editor, toolbar) {
+        try {
+            const range = editor.getSelection();
+            if (range && range.length == 0) {
+                const selectionBounds = editor.getBounds(range);
+                const line = editor.getLine(range.index);
+                if (line[0].domNode.innerText.trim().length === 0) {
+                    const editorBounds = editor.container.getBoundingClientRect();
+                    var toolbarTop = window.pageYOffset + editorBounds.top + selectionBounds.top;
+                    toolbar.style.top = toolbarTop + 'px';
+                    toolbar.classList.add('visible');
+                } else {
+                    toolbar.classList.remove('visible');
+                }
+            } else {
+                toolbar.classList.remove('visible');
+            }
+        } catch (err) {
+            toolbar.classList.remove('visible');
+        }
+    }
 
     const headingEditor = initEditor(headingField, {
         placeholder: 'Title',

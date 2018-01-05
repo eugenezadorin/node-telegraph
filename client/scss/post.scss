@@ -40,6 +40,10 @@
             padding: 3px;
             color: #f1f1f1;
 
+            .ql-stroke {
+                stroke: #f1f1f1;
+            }
+
             svg {
                 float: none;
             }
@@ -48,17 +52,50 @@
         button:hover, button:focus, button.ql-active {
             background-color: rgba(208, 208, 208, 1);
             color: #000;
+
+            .ql-stroke {
+                stroke: #000;
+            }
         }
     }
 
-    .post-form__media-toolbar {
+    .post-form__toolbar-media {
         position: absolute;
         z-index: 10;
         top: 0;
         left: 100px;
-        background: #1b1b1b;
         color: #fff;
         visibility: hidden;
+        opacity: 0;
+        transition: visibility .2s ease-out, opacity .2s ease-out;
+
+        &.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        button {
+            cursor: pointer;
+            -webkit-appearance: none;
+            border: none;
+            background: none;
+            outline: none;
+            width: 26px;
+            height: 22px;
+            display: inline-block;
+            padding: 1px 5px;
+            box-sizing: border-box;
+        }
+
+        svg {
+            width: 100%;
+        }
+
+        .post-form__toolbar-media-video svg {
+            max-width: 12px;
+            position: relative;
+            top: -1px;
+        }
     }
 
     .post-form__heading {
