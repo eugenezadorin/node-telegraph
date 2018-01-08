@@ -6,6 +6,7 @@
     const debounce = require('debounce');
     const utils = require('./utils'); 
     const icons = require('./icons');
+    const CustomImageBlot = require('./custom_image_blot');
 
     const autosaveDelay = 500;
     
@@ -18,6 +19,10 @@
     const toolbarMediaImageBtn = toolbarMedia.querySelector('.post-form__toolbar-media-image');
     const fileInput = component.querySelector('.post-form__file');
     const postCode = component.dataset.postCode;
+
+    console.log('1010');
+
+    Quill.register(CustomImageBlot, true);
 
     var qIcons = Quill.import('ui/icons');
     qIcons['header'][2] = icons.h2;
@@ -155,8 +160,14 @@
             data.append('file', fileInput.files[0]);
             axios.post('/upload', data)
                 .then(function(response) {
-                    console.log(response);
                     fileInput.value = null;
+                    try {
+                        const src = response.data.path;
+                        const range = storyEditor.getSelection(true);
+                        storyEditor.insertEmbed(range.index, 'custom_image', {src: src, alt: 'test'}, Quill.sources.USER);
+                    } catch (err) { 
+                        console.log(err);
+                    }
                 })
                 .catch(function(error){
                     console.log(error);
