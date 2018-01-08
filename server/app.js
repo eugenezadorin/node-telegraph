@@ -3,6 +3,10 @@ const crypto = require('crypto');
 const config = require('./config');
 const Post = require('./post');
 const mime = require('mime/lite');
+const mmmagic = require('mmmagic');
+const sharp = require('sharp');
+
+const libmagic = new mmmagic.Magic(mmmagic.MAGIC_MIME_TYPE);
 
 app.use(function(req, res, next){
     var userId = req.signedCookies[ config.userCookieName ];
@@ -106,27 +110,44 @@ app.post('/upload', function(req, res){
     }
 
     const file = req.files.file;
-    
-    /** @todo check REAL mimetype with mmmagic - https://github.com/mscdex/mmmagic */
-    if (file.mimetype.indexOf('image/') != 0) {
+    if (!file || !file.data) {
         return res.sendStatus(400);
     }
 
-    const ext = mime.getExtension(file.mimetype);
-    if (!ext) {
-        return res.sendStatus(400);
-    }
-
-    const fileName = crypto.pseudoRandomBytes( config.fileNameLen / 2 ).toString('hex') + '.' + ext;
-
-    const serverPath = './server/upload/' + fileName;
-    const publicPath = '/file/' + fileName;
-
-    file.mv(serverPath, function(error){
+    libmagic.detect(file.data, function(error, realMimetype){
         if (error) {
-            return res.sendStatus(500);
+            return res.sendStatus(400);
         } else {
-            return res.json({path: publicPath});
+            if (realMimetype.indexOf('image/') != 0) {
+                return res.sendStatus(400);
+            }
+
+            const ext = mime.getExtension(realMimetype);
+            if (!ext) {
+                return res.sendStatus(400);
+            }
+
+            const fileName = crypto.pseudoRandomBytes( config.fileNameLen / 2 ).toString('hex') + '.' + ext;
+
+            const serverPath = './server/upload/' + fileName;
+            const publicPath = '/file/' + fileName;
+
+            sharp(file.data)
+                .resize(config.fileMaxWidth, null)
+                .withoutEnlargement()
+                .toFile(serverPath, function(error, info){
+                    if (error) {
+                        return res.sendStatus(500);
+                    } else {
+                        info.path = publicPath;
+                        return res.json({
+                            path: publicPath,
+                            width: info.width,
+                            height: info.height,
+                            size: info.size
+                        });
+                    }
+                });
         }
     });
 });

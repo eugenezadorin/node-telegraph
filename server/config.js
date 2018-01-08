@@ -20,4 +20,6 @@ module.exports = {
 
     /** Length of random name for saved files */
     fileNameLen: 32,
+
+    fileMaxWidth: 1024,
 };
