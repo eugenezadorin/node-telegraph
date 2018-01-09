@@ -20,8 +20,6 @@
     const fileInput = component.querySelector('.post-form__file');
     const postCode = component.dataset.postCode;
 
-    console.log('1010');
-
     Quill.register(CustomImageBlot, true);
 
     var qIcons = Quill.import('ui/icons');
@@ -164,7 +162,7 @@
                     try {
                         const src = response.data.path;
                         const range = storyEditor.getSelection(true);
-                        storyEditor.insertEmbed(range.index, 'custom_image', {src: src, alt: 'test'}, Quill.sources.USER);
+                        storyEditor.insertEmbed(range.index, 'custom_image', {src: src, caption: ''}, Quill.sources.USER);
                     } catch (err) { 
                         console.log(err);
                     }

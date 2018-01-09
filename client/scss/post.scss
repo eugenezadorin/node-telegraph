@@ -146,6 +146,36 @@
         margin-bottom: 60px;
     }
 
+    .post-form__picture {
+        width: 100%;
+        margin: 1em 0;
+        text-align: center;
+
+        img {
+            border: 4px solid transparent;
+        }
+
+        &:hover img {
+            border-color: #b3b3b3;
+        }
+
+        textarea {
+            overflow: hidden;
+            word-wrap: break-word;
+            width: 100%;
+            height: auto;
+            text-align: center;
+            outline: none;
+            border: none;
+            resize: none;
+            font-size: 13px;
+            color: #8e8e8e;
+            line-height: 1.4;
+            padding: 0;
+            margin: 0;
+        }
+    }
+
     .ql-container {
         border: none;
         font-family: $font-sans;

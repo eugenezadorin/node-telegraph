@@ -15,16 +15,35 @@ CustomImageBlot.prototype.constructor = CustomImageBlot;
 extend(CustomImageBlot, BlockEmbed);
 
 CustomImageBlot.create = function(value) {
-    var wrapper = document.createElement('DIV');
+    var wrapper = document.createElement('FIGURE');
     wrapper.className = 'post-form__picture';
+    wrapper.contentEditable = false;
 
     var image = document.createElement('IMG');
-    image.setAttribute('alt', value.alt);
+    image.setAttribute('alt', '');
     image.setAttribute('src', value.src);
 
-    var caption = document.createElement('DIV');
+    var caption = document.createElement('FIGCAPTION');
     caption.className = 'post-form__caption';
-    caption.textContent = 'Optional caption';
+
+    var textarea = document.createElement('TEXTAREA');
+    textarea.setAttribute('placeholder', 'Optional caption');
+    textarea.setAttribute('rows', '1');
+    textarea.value = value.caption;
+
+    var autosize = function(obj) {
+        obj.style.height = 'auto';
+        obj.style.height = (2 + obj.scrollHeight) + 'px';
+    };
+
+    textarea.oninput = function() { 
+        autosize(this); 
+    };
+    textarea.onload = function() {
+        autosize(this);
+    };
+
+    caption.appendChild(textarea);
 
     wrapper.appendChild(image);
     wrapper.appendChild(caption);
@@ -34,10 +53,11 @@ CustomImageBlot.create = function(value) {
 
 CustomImageBlot.value = function(node) {
     var img = node.querySelector('img');
+    var textarea = node.querySelector('textarea');
 
     return {
-        alt: img.getAttribute('alt'),
-        src: img.getAttribute('src')
+        src: img.getAttribute('src'),
+        caption: textarea.value
     };
 };
 
