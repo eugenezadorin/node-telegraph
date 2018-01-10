@@ -1,4 +1,6 @@
 module.exports = {
+
+    appPort: 3000,
     
     /** Maximal length of trimmed and trasliterated title */
     postSlugLen: 100,
