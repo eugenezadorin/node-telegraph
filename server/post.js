@@ -14,6 +14,7 @@ class Post
         this._id = params._id || '';
         this.author = params.author || '';
         this.story = params.story || '';
+        this.delta = params.delta || {};
         this.userId = params.userId || '';
         this.code = params.code || crypto.randomBytes(config.postCodeLen / 2).toString('hex');
 
@@ -82,6 +83,7 @@ class Post
             title: this.title,
             author: this.author,
             story: this.story,
+            delta: this.delta,
             userId: this.userId,
             slug: this.slug,
             code: this.code
@@ -101,6 +103,7 @@ class Post
             title: this.title,
             author: this.author,
             story: this.story,
+            delta: this.delta,
             userId: this.userId,
             slug: this.slug,
             code: this.code

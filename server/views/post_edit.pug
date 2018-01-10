@@ -5,5 +5,15 @@ block content
             include toolbar.pug
             .post-form__heading #{post.title}
             .post-form__author #{post.author}
-            .post-form__story !{post.story}
+            .post-form__story Loading...
             button.post-form__publish Save
+    script.
+        (function() {
+            try {
+                var autosaveKey = 'story_!{post.code}';
+                var delta = !{JSON.stringify(post.delta)};
+                window.localStorage.setItem(autosaveKey, JSON.stringify(delta));
+            } catch (error) {
+                window.location.href = '!{post.url()}';
+            }
+        })();

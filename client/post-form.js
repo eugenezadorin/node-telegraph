@@ -20,6 +20,10 @@
     const fileInput = component.querySelector('.post-form__file');
     const postCode = component.dataset.postCode;
 
+    const autosaveTitleKey = postCode ? 'title_' + postCode : 'latest_title';
+    const autosaveAuthorKey = postCode ? 'author_' + postCode : 'latest_author';
+    const autosaveStoryKey = postCode ? 'story_' + postCode : 'latest_story';
+
     Quill.register(CustomImageBlot, true);
 
     var qIcons = Quill.import('ui/icons');
@@ -47,7 +51,7 @@
             if (savedContents) {
                 editor.setContents(JSON.parse(savedContents));
             }
-        } catch (err) { /**/ }
+        } catch (err) { console.log(err); }
 
         editor.on('text-change', debounce(function(){
             window.localStorage.setItem(autosaveKey, JSON.stringify(editor.getContents()));
@@ -125,7 +129,7 @@
             toolbar: false,
             keyboard: inlineEditorKeyboardBehavior
         }
-    }, 'latest_title');
+    }, autosaveTitleKey);
 
     const authorEditor = initEditor(authorField, {
         placeholder: 'Your name',
@@ -134,7 +138,7 @@
             toolbar: false,
             keyboard: inlineEditorKeyboardBehavior
         }
-    }, 'latest_author');
+    }, autosaveAuthorKey);
 
     const storyEditor = initEditor(storyField, {
         placeholder: 'Your story',
@@ -144,7 +148,7 @@
                 container: toolbar 
             }
         }
-    }, 'latest_story');
+    }, autosaveStoryKey);
 
 
     toolbarMediaImageBtn.addEventListener('click', function(event){
@@ -203,25 +207,45 @@
         return !errors;
     };
 
+
+    function extractTextareas(editorNode) {
+        var virtualBlock = editorNode.cloneNode(true);
+        var textareas = virtualBlock.querySelectorAll('textarea');
+        var content, parent, area;
+
+        for (var i = 0; i < textareas.length; i++) {
+            area = textareas[i];
+            content = document.createTextNode(area.value);
+            parent = area.parentNode;
+
+            parent.replaceChild(content, area);
+        }
+
+        return virtualBlock;
+    }
+
     submitBtn.addEventListener('click', function(event){
         event.preventDefault();
         if (!validateForm()) {
             return false;
         }
 
+        var storyEditorClone = extractTextareas(storyEditor.root);
+
         var data = {
             title: utils.getInlineText(headingEditor),
             author: utils.getInlineText(authorEditor),
-            story: storyEditor.root.innerHTML
+            story: storyEditorClone.innerHTML,
+            delta: storyEditor.getContents()
         };
         if (postCode) {
             data.code = postCode;
         }
         axios.post('/save', data)
             .then(function(response) {
-                window.localStorage.removeItem('latest_title');
-                window.localStorage.removeItem('latest_author');
-                window.localStorage.removeItem('latest_story');
+                window.localStorage.removeItem(autosaveTitleKey);
+                window.localStorage.removeItem(autosaveAuthorKey);
+                window.localStorage.removeItem(autosaveStoryKey);
 
                 window.location.href = response.data.url;
             })
