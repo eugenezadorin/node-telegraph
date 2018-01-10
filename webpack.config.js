@@ -1,8 +1,9 @@
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
+    devtool: 'source-map',
     entry: './client/app.js',
     output: {
         filename: './public/js/bundle.js'
@@ -24,7 +25,9 @@ module.exports = {
         ]
     },
     plugins: [
-        new UglifyJsPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            sourceMap: true
+        }),
         new ExtractTextPlugin({
             filename: './public/css/bundle.css',
             allChunks: true
