@@ -4,7 +4,8 @@ $font-sans: 'Open Sans', sans-serif;
 
 html, body {
 	font-family: $font-sans;
-	font-size: 15px;
+	font-size: 17px;
+	color: #1d1d1d;
 }
 
 @import "post.scss";

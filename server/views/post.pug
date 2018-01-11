@@ -11,6 +11,6 @@ block content
                         time(datetime=post.createdAt) #{post.createdAtLocale}
                         if canEdit
                             span &bull;
-                            a(href=post.editUrl()) Edit post
+                            a(href=post.editUrl()) Edit&nbsp;post
             .post-form__story.ql-container.ql-snow
                 .ql-editor !{post.story}
