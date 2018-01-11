@@ -1,5 +1,6 @@
 .vscode
 .env
+*.map
 node_modules
 server/db/posts
 server/upload/*
