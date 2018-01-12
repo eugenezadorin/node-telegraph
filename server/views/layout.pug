@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 html(lang="en")
-    head
+    head(prefix="article: http://ogp.me/ns/article#")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
@@ -9,6 +9,7 @@ html(lang="en")
         block styles
             link(rel="stylesheet", href="/css/bundle.css")
         title #{title}
+        block meta_info
     body
         block content
         block scripts

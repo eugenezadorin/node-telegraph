@@ -22,6 +22,7 @@ CustomImageBlot.create = function(value) {
     var image = document.createElement('IMG');
     image.setAttribute('alt', '');
     image.setAttribute('src', value.src);
+    image.setAttribute('itemprop', 'image');
 
     var caption = document.createElement('FIGCAPTION');
     caption.className = 'post-form__caption';

@@ -34,7 +34,7 @@ app.post('/save', function(req, res){
         'pre', 'img', 'figure', 'figcaption'
     ];
     const allowedAttributes = {
-        '*': ['href', 'class', 'contenteditable', 'alt', 'src', 'placeholder', 'target', 'spellcheck']
+        '*': ['href', 'class', 'contenteditable', 'alt', 'src', 'placeholder', 'target', 'spellcheck', 'itemprop']
     };
 
     req.body.title = sanitizeHtml(req.body.title, disallowAll);

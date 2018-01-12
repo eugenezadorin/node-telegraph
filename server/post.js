@@ -20,8 +20,9 @@ class Post
 
         this.setTitle(params.title || '');
 
+        var date;
         if (params.createdAt) {
-            const date = new Date(params.createdAt);
+            date = new Date(params.createdAt);
             this.createdAt = date;
             this.createdAtLocale = date.toLocaleString('en-US', {
                 day: 'numeric',
@@ -34,6 +35,22 @@ class Post
         } else {
             this.createdAt = null;
             this.createdAtLocale = null;
+        }
+
+        if (params.updatedAt) {
+            date = new Date(params.updatedAt);
+            this.updatedAt = date;
+            this.updatedAtLocale = date.toLocaleString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: false
+            });
+        } else {
+            this.updatedAt = null;
+            this.updatedAtLocale = null;
         }
     }
 
