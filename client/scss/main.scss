@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&subset=cyrillic');
+@import url('https://fonts.googleapis.com/css?family=Merriweather&subset=cyrillic');
 
 $font-sans: 'Open Sans', sans-serif;
+$font-serif: 'Merriweather', serif;
 
 html, body {
 	font-family: $font-sans;
