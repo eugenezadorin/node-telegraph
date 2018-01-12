@@ -1,6 +1,14 @@
 module.exports = {
 
+    appProtocol: 'http',
+
+    appHost: 'localhost',
+
     appPort: 3000,
+
+    get appUrl() {
+        return this.appProtocol + '://' + this.appHost + ((this.appPort == 80) ? '' : ':' + this.appPort);
+    },
     
     /** Maximal length of trimmed and trasliterated title */
     postSlugLen: 100,
