@@ -19,6 +19,12 @@ app.use(fileUpload({
     }
 }));
 
+app.use(function(req, res, next){
+    req.absUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    req.rootUrl = req.protocol + '://' + req.get('host');
+    next();
+});
+
 app.use('/', express.static(path.join(__dirname, '../public')));
 
 app.use('/file/', express.static(path.join(__dirname, 'upload')));
