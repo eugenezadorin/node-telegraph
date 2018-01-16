@@ -17,54 +17,55 @@ class Post
         this.delta = params.delta || {};
         this.userId = params.userId || '';
         this.code = params.code || crypto.randomBytes(config.postCodeLen / 2).toString('hex');
+        this.title = params.title || '';
+        this.createdAt = params.createdAt ? new Date(params.createdAt) : null;
+        this.updatedAt = params.updatedAt ? new Date(params.updatedAt) : null;
+    }
 
-        this.setTitle(params.title || '');
-
-        var date;
-        if (params.createdAt) {
-            date = new Date(params.createdAt);
-            this.createdAt = date;
-            this.createdAtLocale = date.toLocaleString('en-US', {
+    static get defaults() {
+        return {
+            dateLocaleOptions: {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
                 hour: 'numeric',
                 minute: 'numeric',
                 hour12: false
-            });
-        } else {
-            this.createdAt = null;
-            this.createdAtLocale = null;
-        }
-
-        if (params.updatedAt) {
-            date = new Date(params.updatedAt);
-            this.updatedAt = date;
-            this.updatedAtLocale = date.toLocaleString('en-US', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                hour12: false
-            });
-        } else {
-            this.updatedAt = null;
-            this.updatedAtLocale = null;
-        }
+            }
+        };
     }
 
-    setTitle(title) {
-        this.title = title;
-        this.slug = slugify(this.title).substring(0, config.postSlugLen) + '-' + this.code;
+    set title(value) {
+        this._title = value;
+        this.slug = slugify(this._title).substring(0, config.postSlugLen) + '-' + this.code;
     }
 
-    url() {
+    get title() {
+        return this._title;
+    }
+
+    get url() {
         return '/' + this.slug;
     }
 
-    editUrl() {
+    get editUrl() {
         return '/' + this.slug + '/edit';
+    }
+
+    get createdAtLocale() {
+        if (this.createdAt && this.createdAt.toLocaleString) {
+            return this.createdAt.toLocaleString('en-US', Post.defaults.dateLocaleOptions);
+        } else {
+            return null;
+        }
+    }
+
+    get updatedAtLocale() {
+        if (this.updatedAt && this.updatedAt.toLocaleString) {
+            return this.updatedAt.toLocaleString('en-US', Post.defaults.dateLocaleOptions);
+        } else {
+            return null;
+        }
     }
 
     editable(userId) {

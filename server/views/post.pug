@@ -2,8 +2,8 @@ extends layout.pug
 block content
     .post-page
         .post-form(itemscope, itemtype="http://schema.org/BlogPosting")
-            link(itemprop="mainEntityOfPage", href=post.url())
-            link(itemprop="url", href=post.url())
+            link(itemprop="mainEntityOfPage", href=post.absUrl)
+            link(itemprop="url", href=post.absUrl)
             meta(itemprop="dateModified", content=post.updatedAt)
             h1.post-form__heading.ql-container.ql-snow 
                 .ql-editor(itemprop="headline") #{post.title}
@@ -15,15 +15,15 @@ block content
                         time(datetime=post.createdAt, content=post.createdAt, itemprop="datePublished") #{post.createdAtLocale}
                         if canEdit
                             span.dot &bull;
-                            a(href=post.editUrl()) Edit&nbsp;post
+                            a(href=post.editUrl) Edit&nbsp;post
             .post-form__story.ql-container.ql-snow
                 .ql-editor(itemprop="articleBody") !{post.story}
 
 block meta_info
-    link(rel="canonical", href=post.url())
+    link(rel="canonical", href=post.absUrl)
     meta(property="og:type", content="article")
     meta(property="og:title", content=post.title)
-    meta(property="og:url", content=post.url())
+    meta(property="og:url", content=post.absUrl)
     meta(property="og:description", content="")
     meta(property="og:image", content="")
     meta(property="article:published_time", content=post.createdAt)

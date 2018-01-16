@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
+const crypto = require('crypto');
 const path = require('path');
 const app = express();
 const config = require('./config');
@@ -20,8 +21,21 @@ app.use(fileUpload({
 }));
 
 app.use(function(req, res, next){
-    req.absUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    var userId = req.signedCookies[ config.userCookieName ];
+    if (!userId) {
+        userId = crypto.randomBytes( config.userCookieLen / 2 ).toString('hex');
+        res.cookie(config.userCookieName, userId, { 
+            signed: true,
+            expires: new Date(Date.now() + config.userCookieLifetime)
+        });
+    }
+    req.userId = userId;
+    next();
+});
+
+app.use(function(req, res, next){
     req.rootUrl = req.protocol + '://' + req.get('host');
+    req.absUrl = req.rootUrl + req.originalUrl;
     next();
 });
 

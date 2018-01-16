@@ -14,6 +14,6 @@ block content
                 var delta = !{JSON.stringify(post.delta)};
                 window.localStorage.setItem(autosaveKey, JSON.stringify(delta));
             } catch (error) {
-                window.location.href = '!{post.url()}';
+                window.location.href = '!{post.url}';
             }
         })();

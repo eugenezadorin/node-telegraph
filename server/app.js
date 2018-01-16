@@ -9,19 +9,6 @@ const sanitizeHtml = require('sanitize-html');
 
 const libmagic = new mmmagic.Magic(mmmagic.MAGIC_MIME_TYPE);
 
-app.use(function(req, res, next){
-    var userId = req.signedCookies[ config.userCookieName ];
-    if (!userId) {
-        userId = crypto.randomBytes( config.userCookieLen / 2 ).toString('hex');
-        res.cookie(config.userCookieName, userId, { 
-            signed: true,
-            expires: new Date(Date.now() + config.userCookieLifetime)
-        });
-    }
-    req.userId = userId;
-    next();
-});
-
 app.get('/', function (req, res) {
     res.render('index', {title: 'New post'});
 });
@@ -55,7 +42,7 @@ app.post('/save', function(req, res){
             } else if (!post.editable(req.userId)) {
                 res.sendStatus(403);
             } else {
-                post.setTitle(req.body.title);
+                post.title = req.body.title;
                 post.author = req.body.author;
                 post.story = req.body.story;
                 post.delta = req.body.delta;
@@ -68,7 +55,7 @@ app.post('/save', function(req, res){
                         res.json({
                             code: updatedPost.code,
                             slug: updatedPost.slug,
-                            url: updatedPost.url()
+                            url: updatedPost.url
                         });
                     }
                 });
@@ -92,7 +79,7 @@ app.post('/save', function(req, res){
                 res.json({
                     code: newPost.code,
                     slug: newPost.slug,
-                    url: newPost.url()
+                    url: newPost.url
                 });
             }
         });
@@ -125,7 +112,7 @@ app.post('/upload', function(req, res){
             const fileName = crypto.pseudoRandomBytes( config.fileNameLen / 2 ).toString('hex') + '.' + ext;
 
             const serverPath = './server/upload/' + fileName;
-            const publicPath = '/file/' + fileName;
+            const publicPath = req.rootUrl + '/file/' + fileName;
 
             sharp(file.data)
                 .resize(config.fileMaxWidth, null)
@@ -150,6 +137,7 @@ app.post('/upload', function(req, res){
 app.get('/:slug', function(req, res){
     Post.findBySlug(req.params.slug, function(error, post){
         if (post) {
+            post.absUrl = req.rootUrl + post.url;
             res.render('post', {
                 post: post, 
                 canEdit: post.editable(req.userId),
@@ -167,7 +155,7 @@ app.get('/:slug/edit', function(req, res){
             if (post.editable(req.userId)) {
                 res.render('post_edit', {post: post, title: post.title});
             } else {
-                res.redirect(post.url());
+                res.redirect(post.url);
             }
         } else {
             res.sendStatus(404);
