@@ -1,6 +1,9 @@
-window.Quill = require('quill');
-window.axios = require('axios');
+import Quill from 'quill';
+import axios from 'axios';
 
-require('normalize.css');
-require('quill/dist/quill.snow.css');
-require('./scss/main.scss');
+import 'normalize.css';
+import 'quill/dist/quill.snow.css';
+import './scss/main.scss';
+
+window.Quill = Quill;
+window.axios = axios;

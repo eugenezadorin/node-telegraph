@@ -1,11 +1,12 @@
+import Quill from 'quill';
+import axios from 'axios';
+import debounce from 'debounce';
+import utils from './utils';
+import icons from './icons';
+
 (function(component) {
     if (!component) return;
 
-    const Quill = require('quill');
-    const axios = require('axios'); 
-    const debounce = require('debounce');
-    const utils = require('./utils'); 
-    const icons = require('./icons');
     const CustomImageBlot = require('./custom_image_blot');
 
     const autosaveDelay = 500;

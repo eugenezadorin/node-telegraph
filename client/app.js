@@ -1,2 +1,2 @@
-require('./bootstrap.js');
-require('./post-form.js');
+import './bootstrap';
+import './post-form';

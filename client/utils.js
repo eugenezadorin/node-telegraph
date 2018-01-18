@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     isEditorEmpty: function(editor) {
         return editor.getText().trim().length === 0;
     },
