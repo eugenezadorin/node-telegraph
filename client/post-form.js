@@ -57,68 +57,78 @@ import CustomImageBlot from './custom_image_blot';
             window.localStorage.setItem(autosaveKey, JSON.stringify(editor.getContents()));
         }, autosaveDelay));
 
-        if (options && options.modules && options.modules.toolbar && options.modules.toolbar.container) {
-            const _toolbar = options.modules.toolbar.container;
-
+        if (options && options.initToolbars) {
             editor.on('text-change', function(){
                 setTimeout(function(){
                     toggleToolbarMedia(editor, toolbarMedia);
                 }, 0);
             });
 
-            editor.on('selection-change', function(range) {
+            editor.on('selection-change', function() {
                 toggleToolbarMedia(editor, toolbarMedia);
-
-                if (range) {
-                    if (range.length == 0) {
-                        _toolbar.style.visibility = 'hidden';
-                        _toolbar.style.left = '0';
-                        _toolbar.style.top = '0';
-                    } else {
-                        const selectionBounds = editor.getBounds(range);
-                        const editorBounds = element.getBoundingClientRect();
-                        const toolbarBounds = _toolbar.getBoundingClientRect();
-
-                        var toolbarLeft = window.pageYOffset + editorBounds.left + selectionBounds.left;
-                        toolbarLeft += ((selectionBounds.right - selectionBounds.left) / 2);
-                        toolbarLeft -= (toolbarBounds.width / 2);
-
-                        var toolbarTop = window.pageYOffset + editorBounds.top + selectionBounds.top - toolbarBounds.height - 5;
-
-                        _toolbar.style.top = toolbarTop + 'px';
-                        _toolbar.style.left = toolbarLeft + 'px';
-                        _toolbar.style.visibility = 'visible';
-                    }
-                } else {
-                    _toolbar.style.visibility = 'hidden';
-                    _toolbar.style.left = '0';
-                    _toolbar.style.top = '0';
-                }
+                toggleToolbar(editor, toolbar);
             });
         }
 
         return editor;
     };
 
-    function toggleToolbarMedia(editor, toolbar) {
+    function toggleToolbarMedia(editor, tb) {
         try {
             const range = editor.getSelection();
             if (range && range.length == 0) {
                 const selectionBounds = editor.getBounds(range);
                 const line = editor.getLine(range.index);
                 if (line[0].domNode.innerText.trim().length === 0) {
-                    const editorBounds = editor.container.getBoundingClientRect();
-                    var toolbarTop = window.pageYOffset + editorBounds.top + selectionBounds.top;
-                    toolbar.style.top = toolbarTop + 'px';
-                    toolbar.classList.add('visible');
+                    tb.style.top = selectionBounds.top + 'px';
+                    tb.classList.add('visible');
                 } else {
-                    toolbar.classList.remove('visible');
+                    tb.classList.remove('visible');
                 }
             } else {
-                toolbar.classList.remove('visible');
+                tb.classList.remove('visible');
             }
         } catch (err) {
-            toolbar.classList.remove('visible');
+            tb.classList.remove('visible');
+        }
+    }
+
+    function toggleToolbar(editor, tb) {
+        try {
+            const range = editor.getSelection();
+            if (range) {
+                if (range.length == 0) {
+                    tb.classList.remove('visible');
+                } else {
+                    const editorBounds = editor.root.getBoundingClientRect();
+                    const selectionBounds = editor.getBounds(range);
+                    const toolbarBounds = tb.getBoundingClientRect();
+                    const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+                    let toolbarLeft = selectionBounds.left;
+                    toolbarLeft += ((selectionBounds.right - selectionBounds.left) / 2);
+                    toolbarLeft -= (toolbarBounds.width / 2);
+
+                    const leftBorder = editorBounds.left + toolbarLeft;
+                    const rightBorder = editorBounds.left + toolbarLeft + toolbarBounds.width;
+
+                    if (leftBorder <= 0) {
+                        toolbarLeft = 10 - editorBounds.left;
+                    } else if (rightBorder >= windowWidth) {
+                        toolbarLeft -= rightBorder - windowWidth + 10;
+                    }
+
+                    let toolbarTop = selectionBounds.top - toolbarBounds.height - 6;
+
+                    tb.style.top = toolbarTop + 'px';
+                    tb.style.left = toolbarLeft + 'px';
+                    tb.classList.add('visible');
+                }
+            } else {
+                tb.classList.remove('visible');
+            }
+        } catch (err) {
+            tb.classList.remove('visible');
         }
     }
 
@@ -143,6 +153,7 @@ import CustomImageBlot from './custom_image_blot';
     const storyEditor = initEditor(storyField, {
         placeholder: 'Your story',
         theme: 'snow',
+        initToolbars: true,
         modules: {
             toolbar: { 
                 container: toolbar 
@@ -150,6 +161,8 @@ import CustomImageBlot from './custom_image_blot';
         }
     }, autosaveStoryKey);
 
+    storyField.appendChild(toolbarMedia);
+    storyField.appendChild(toolbar);
 
     toolbarMediaImageBtn.addEventListener('click', function(event){
         event.preventDefault();

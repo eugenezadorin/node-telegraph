@@ -26,6 +26,8 @@
 }
 
 .post-form {
+    position: relative;
+
     .post-form__toolbar {
         position: absolute;
         z-index: 10;
@@ -35,8 +37,16 @@
         box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.33);
         top: 0;
         left: 0;
+        width: 232px;
         padding: 6px 4px;
         visibility: hidden;
+        opacity: 0;
+        transition: visibility .2s ease-out, opacity .2s ease-out;
+
+        &.visible {
+            visibility: visible;
+            opacity: 1;
+        }
 
         button {
             border-radius: 3px;
@@ -45,6 +55,7 @@
             margin: 0 2px;
             padding: 3px;
             color: #f1f1f1;
+            outline: none;
 
             .ql-stroke {
                 stroke: #f1f1f1;
@@ -69,11 +80,18 @@
         position: absolute;
         z-index: 10;
         top: 0;
-        left: 100px;
+        left: -60px;
         color: #fff;
         visibility: hidden;
         opacity: 0;
         transition: visibility .2s ease-out, opacity .2s ease-out;
+        margin-top: 2px;
+
+        @media (max-width: 880px) {
+            & {
+                left: 0;
+            }
+        }
 
         &.visible {
             visibility: visible;
