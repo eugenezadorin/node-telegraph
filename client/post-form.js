@@ -3,11 +3,10 @@ import axios from 'axios';
 import debounce from 'debounce';
 import utils from './utils';
 import icons from './icons';
+import CustomImageBlot from './custom_image_blot';
 
 (function(component) {
     if (!component) return;
-
-    const CustomImageBlot = require('./custom_image_blot');
 
     const autosaveDelay = 500;
     
