@@ -1,6 +1,6 @@
-const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     devtool: 'source-map',
@@ -30,7 +30,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({
+        new UglifyJsPlugin({
             sourceMap: true
         }),
         new ExtractTextPlugin({
