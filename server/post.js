@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const slugify = require('transliteration').slugify;
 const db = require('nedb');
+const htmlparser = require('htmlparser2');
 const config = require('./config');
 const storage = new db({
     filename: './server/db/posts',
@@ -42,6 +43,36 @@ class Post
 
     get title() {
         return this._title;
+    }
+
+    set story(value) {
+        this._story = value;
+
+        const handler = new htmlparser.DomHandler((error, dom) => {
+            if (error) return;
+
+            const domUtils = htmlparser.DomUtils;
+
+            const description = domUtils.findOne(el => {
+                return el.type && el.type == 'tag' && el.name && el.name == 'p';
+            }, dom);
+
+            this.description = description ? domUtils.getText(description) : null;
+
+            const image = domUtils.findOne(el => {
+                return el.type && el.type == 'tag' && el.name && el.name == 'img';
+            }, dom);
+            
+            this.image = (image && image.attribs && image.attribs.src) ? image.attribs.src : null;
+        });
+
+        const parser = new htmlparser.Parser(handler);
+        parser.write(value);
+        parser.end();
+    }
+
+    get story() {
+        return this._story;
     }
 
     get url() {
@@ -101,18 +132,20 @@ class Post
             title: this.title,
             author: this.author,
             story: this.story,
+            description: this.description,
+            image: this.image,
             delta: this.delta,
             userId: this.userId,
             slug: this.slug,
             code: this.code
         };
-        storage.insert(post, function(error){
+        storage.insert(post, error => {
             if (error) {
                 callback(error);
             } else {
                 callback(null, this);
             }
-        }.bind(this));
+        });
     }
 
     update(callback) {
@@ -121,12 +154,14 @@ class Post
             title: this.title,
             author: this.author,
             story: this.story,
+            description: this.description,
+            image: this.image,
             delta: this.delta,
             userId: this.userId,
             slug: this.slug,
             code: this.code
         };
-        storage.update(findPost, replacePost, {}, function(error, numReplaced){
+        storage.update(findPost, replacePost, {}, (error, numReplaced) => {
             if (error) {
                 callback(error);
             } else if (numReplaced === 0) {
@@ -134,7 +169,7 @@ class Post
             } else {
                 callback(null, this);
             }
-        }.bind(this));
+        });
     }
 }
 

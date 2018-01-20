@@ -10,7 +10,7 @@ const sanitizeHtml = require('sanitize-html');
 const libmagic = new mmmagic.Magic(mmmagic.MAGIC_MIME_TYPE);
 
 app.get('/', function (req, res) {
-    res.render('index', {title: 'New post'});
+    res.render('index');
 });
 
 app.post('/save', function(req, res){

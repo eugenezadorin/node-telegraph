@@ -17,3 +17,7 @@ block content
                 window.location.href = '!{post.url}';
             }
         })();
+
+block meta_info
+    title #{post.title}
+    meta(name="description", content=post.description)

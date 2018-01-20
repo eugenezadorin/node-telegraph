@@ -8,8 +8,14 @@ html(lang="en")
         link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
         block styles
             link(rel="stylesheet", href="/css/bundle.css")
-        title #{title}
         block meta_info
+            title New post
+            meta(name="description", content="Node-telegraph is simple http://telegra.ph/ clone made for educational purposes")
+            meta(property="og:title", content="New post")
+            meta(property="og:description", content="Node-telegraph is simple http://telegra.ph/ clone made for educational purposes")
+            meta(name="twitter:card", content="summary")
+            meta(name="twitter:title", content="New post")
+            meta(name="twitter:description", content="Node-telegraph is simple http://telegra.ph/ clone made for educational purposes")
     body
         block content
         block scripts

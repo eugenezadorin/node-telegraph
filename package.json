@@ -17,6 +17,7 @@
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "express-fileupload": "^0.3.0",
+    "htmlparser2": "^3.9.2",
     "mime": "^2.2.0",
     "mmmagic": "^0.4.6",
     "nedb": "^1.8.0",
