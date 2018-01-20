@@ -3,6 +3,7 @@
 
 $font-sans: 'Open Sans', sans-serif;
 $font-serif: 'Merriweather', serif;
+$font-buttons: Arial, sans-serif;
 
 html, body {
 	font-family: $font-sans;
@@ -11,3 +12,5 @@ html, body {
 }
 
 @import "post.scss";
+@import "errors.scss";
+@import "buttons.scss";

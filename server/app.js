@@ -134,7 +134,7 @@ app.post('/upload', function(req, res){
     });
 });
 
-app.get('/:slug', function(req, res){
+app.get('/:slug', function(req, res, next){
     Post.findBySlug(req.params.slug, function(error, post){
         if (post) {
             post.absUrl = req.rootUrl + post.url;
@@ -144,12 +144,12 @@ app.get('/:slug', function(req, res){
                 title: post.title
             });
         } else {
-            res.sendStatus(404);
+            next();
         }
     });
 });
 
-app.get('/:slug/edit', function(req, res){
+app.get('/:slug/edit', function(req, res,  next){
     Post.findBySlug(req.params.slug, function(error, post){
         if (post) {
             if (post.editable(req.userId)) {
@@ -158,9 +158,13 @@ app.get('/:slug/edit', function(req, res){
                 res.redirect(post.url);
             }
         } else {
-            res.sendStatus(404);
+            next();
         }
     });
+});
+
+app.use(function(req, res) {
+    res.status(404).render('404');
 });
 
 module.exports = app;

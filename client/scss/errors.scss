@@ -1,0 +1,17 @@
+.error-page {
+    width: auto;
+    max-width: 320px;
+    margin: 0 auto;
+    text-align: center;
+
+    &__code {
+        color: #ccc;
+        font-size: 6em;
+        margin-bottom: .1em;
+    }
+
+    &__description {
+        margin-bottom: 5em;
+        color: #ccc;
+    }
+}
