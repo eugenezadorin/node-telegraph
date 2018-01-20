@@ -153,6 +153,7 @@ import CustomImageBlot from './custom_image_blot';
     const storyEditor = initEditor(storyField, {
         placeholder: 'Your story',
         theme: 'snow',
+        scrollingContainer: document.documentElement,
         initToolbars: true,
         modules: {
             toolbar: { 
