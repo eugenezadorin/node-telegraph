@@ -138,6 +138,8 @@ app.get('/:slug', function(req, res, next){
     Post.findBySlug(req.params.slug, function(error, post){
         if (post) {
             post.absUrl = req.rootUrl + post.url;
+            post.absAmpUrl = req.rootUrl + post.ampUrl;
+            
             res.render('post', {
                 post: post, 
                 canEdit: post.editable(req.userId),
@@ -157,6 +159,21 @@ app.get('/:slug/edit', function(req, res,  next){
             } else {
                 res.redirect(post.url);
             }
+        } else {
+            next();
+        }
+    });
+});
+
+app.get('/:slug/amp', function(req, res, next){
+    Post.findBySlug(req.params.slug, function(error, post){
+        if (post) {
+            post.absUrl = req.rootUrl + post.url;
+            res.render('post_amp', {
+                post: post, 
+                canEdit: post.editable(req.userId),
+                title: post.title
+            });
         } else {
             next();
         }

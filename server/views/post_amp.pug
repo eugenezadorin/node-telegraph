@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+html(amp, lang="en")
+    head(prefix="article: http://ogp.me/ns/article#")
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width,minimum-scale=1,initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+
+        link(rel="icon", href="/favicon.ico", type="image/x-icon")
+        link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
+        link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Open+Sans&subset=cyrillic")
+        link(rel="canonical", href=post.absUrl)
+
+        title #{post.title}
+        meta(name="description", content=post.description)
+        
+        meta(property="og:type", content="article")
+        meta(property="og:title", content=post.title)
+        meta(property="og:url", content=post.absUrl)
+        meta(property="og:description", content=post.description)
+        meta(property="og:image", content=post.image)
+        meta(property="article:published_time", content=post.createdAt)
+        meta(property="article:modified_time", content=post.updatedAt)
+        meta(property="article:author", content=post.author)
+        meta(name="twitter:card", content="summary")
+        meta(name="twitter:title", content=post.title)
+        meta(name="twitter:description", content=post.description)
+        meta(name="twitter:image", content=post.image)
+        
+        style(amp-boilerplate) body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}
+        noscript
+            style(amp-boilerplate) body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}
+        
+        style(amp-custom)
+            | html, body { font-family: 'Open Sans', sans-serif; font-size: 17px; color: #1d1d1d; } 
+            | article { width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; } 
+            | address { display: inline; margin: 0 20px 20px 0; } 
+            | img { max-width: 100%; width: auto; } 
+
+        script(async, src="https://cdn.ampproject.org/v0.js")
+    body
+        article
+            header
+                h1 #{post.title}
+                address #{post.author}
+                time(datetime=post.createdAt, content=post.createdAt) #{post.createdAtLocale}
+            section !{post.story}
+    

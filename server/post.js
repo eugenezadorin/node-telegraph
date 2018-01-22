@@ -83,6 +83,10 @@ class Post
         return '/' + this.slug + '/edit';
     }
 
+    get ampUrl() {
+        return '/' + this.slug + '/amp';
+    }
+
     get createdAtLocale() {
         if (this.createdAt && this.createdAt.toLocaleString) {
             return this.createdAt.toLocaleString('en-US', Post.defaults.dateLocaleOptions);
