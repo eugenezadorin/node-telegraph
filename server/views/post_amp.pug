@@ -8,6 +8,7 @@ html(amp, lang="en")
         link(rel="icon", href="/favicon.ico", type="image/x-icon")
         link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
         link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Open+Sans&subset=cyrillic")
+        link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Merriweather&subset=cyrillic")
         link(rel="canonical", href=post.absUrl)
 
         title #{post.title}
@@ -32,9 +33,21 @@ html(amp, lang="en")
         
         style(amp-custom)
             | html, body { font-family: 'Open Sans', sans-serif; font-size: 17px; color: #1d1d1d; } 
-            | article { width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; } 
-            | address { display: inline; margin: 0 20px 20px 0; } 
+            | article { width: 100%; max-width: 800px; padding: 20px; margin: 0 auto; box-sizing: border-box; line-height: 1.6; } 
+            | header { margin-bottom: 45px; }
+            | header address { display: inline; margin: 0 0 20px 0; font-size: .85em; color: #8a8a8a; font-style: normal; } 
+            | header time { font-size: .85em; color: #8a8a8a; }
+            | header .dot { margin: 0 5px; font-weight: bold; font-size: .85em; color: #8a8a8a; }
             | img { max-width: 100%; width: auto; } 
+            | h1 { font-size: 2.2em; margin-bottom: 5px; }
+            | h2 { font-size: 1.5em; margin: 0 0 .3em 0; }
+            | h3 { font-size: 1.17em; margin: 0 0 .3em 0; }
+            | p { margin: 0 0 1.5em 0; }
+            | a { text-decoration: underline; color: #06c; }
+            | figure { width: 100%; margin: 2em 0; text-align: center; }
+            | figcaption { font-size: 1em; color: #717171; line-height: 1.4; }
+            | blockquote { width: 80%; margin: 2.2em auto; padding: 0; font-size: 1.2em; font-family: Merriweather,serif; }
+            | pre { background-color: #23241f; color: #f8f8f2; overflow: visible; margin: 2.2em 0; padding: 5px 10px; white-space: pre-wrap; border-radius: 3px; }
 
         script(async, src="https://cdn.ampproject.org/v0.js")
     body
@@ -42,6 +55,7 @@ html(amp, lang="en")
             header
                 h1 #{post.title}
                 address #{post.author}
+                span.dot &bull;
                 time(datetime=post.createdAt, content=post.createdAt) #{post.createdAtLocale}
             section !{post.story}
     
