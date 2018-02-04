@@ -1,8 +1,9 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const env = process.env.NODE_ENV;
 
-module.exports = {
+const config = {
     devtool: 'source-map',
     entry: './client/app.js',
     output: {
@@ -30,9 +31,6 @@ module.exports = {
         ]
     },
     plugins: [
-        new UglifyJsPlugin({
-            sourceMap: true
-        }),
         new ExtractTextPlugin({
             filename: './public/css/bundle.css',
             allChunks: true
@@ -40,3 +38,11 @@ module.exports = {
         new OptimizeCssAssetsPlugin()
     ]
 };
+
+if (env == 'production') {
+    config.plugins.push(new UglifyJsPlugin({
+        sourceMap: true
+    }));
+}
+
+module.exports = config;

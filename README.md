@@ -22,4 +22,7 @@ See also — https://github.com/Microsoft/nodejs-guidelines/blob/master/windows-
     # to work on frontend run webpack watcher
     npm run webpack
 
+    # use --production option to apply UglifyJs
+    npm run webpack --production
+
 Notice the project is under development.
