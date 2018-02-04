@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const slugify = require('transliteration').slugify;
 const db = require('nedb');
 const htmlparser = require('htmlparser2');
+const sanitizeHtml = require('sanitize-html');
 const config = require('./config');
 const storage = new db({
     filename: './server/db/posts',
@@ -32,6 +33,17 @@ class Post
                 hour: 'numeric',
                 minute: 'numeric',
                 hour12: false
+            },
+            allowedTags: [
+                'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol', 'li', 
+                'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
+                'pre', 'img', 'figure', 'figcaption', 'amp-img'
+            ],
+            allowedAttributes: {
+                '*': ['href', 'class', 'contenteditable', 'alt', 'src', 'placeholder', 'target', 'spellcheck', 'itemprop', 'width', 'height']
+            },
+            allowedAmpAttributes: {
+                '*': ['href', 'class', 'alt', 'src', 'placeholder', 'target', 'width', 'height', 'layout']
             }
         };
     }
@@ -47,6 +59,23 @@ class Post
 
     set story(value) {
         this._story = value;
+        this.storyAmp = sanitizeHtml(value, {
+            allowedTags: Post.defaults.allowedTags,
+            allowedAttributes: Post.defaults.allowedAmpAttributes,
+            transformTags: {
+                'img': function(tagName, attribs) {
+                    return {
+                        tagName: 'amp-img',
+                        attribs: {
+                            src: attribs.src,
+                            width: attribs.width,
+                            height: attribs.height,
+                            layout: 'responsive',
+                        }
+                    };
+                }
+            }
+        });
 
         const handler = new htmlparser.DomHandler((error, dom) => {
             if (error) return;

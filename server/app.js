@@ -15,20 +15,12 @@ app.get('/', function (req, res) {
 
 app.post('/save', function(req, res){
     const disallowAll = { allowedTags: [], allowedAttributes: [] };
-    const allowedTags = [
-        'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol', 'li', 
-        'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
-        'pre', 'img', 'figure', 'figcaption'
-    ];
-    const allowedAttributes = {
-        '*': ['href', 'class', 'contenteditable', 'alt', 'src', 'placeholder', 'target', 'spellcheck', 'itemprop']
-    };
 
     req.body.title = sanitizeHtml(req.body.title, disallowAll);
     req.body.author = sanitizeHtml(req.body.author, disallowAll);
     req.body.story = sanitizeHtml(req.body.story, {
-        allowedTags: allowedTags,
-        allowedAttributes: allowedAttributes
+        allowedTags: Post.defaults.allowedTags,
+        allowedAttributes: Post.defaults.allowedAttributes
     });
 
     if (req.body.code) 

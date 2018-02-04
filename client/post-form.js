@@ -179,8 +179,11 @@ import CustomImageBlot from './custom_image_blot';
                     fileInput.value = null;
                     try {
                         const src = response.data.path;
+                        const width = response.data.width;
+                        const height = response.data.height;
+                        const caption = '';
                         const range = storyEditor.getSelection(true);
-                        storyEditor.insertEmbed(range.index, 'custom_image', {src: src, caption: ''}, Quill.sources.USER);
+                        storyEditor.insertEmbed(range.index, 'custom_image', {src, width, height, caption}, Quill.sources.USER);
                     } catch (err) { 
                         console.log(err);
                     }

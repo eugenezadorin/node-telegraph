@@ -164,6 +164,12 @@
         margin: 2em 0;
         text-align: center;
 
+        img {
+            max-width: 100%;
+            width: auto;
+            height: auto;
+        }
+
         .post-form__caption {
             font-size: 1em;
             color: #717171;

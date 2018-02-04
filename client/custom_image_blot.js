@@ -12,7 +12,7 @@ class CustomImageBlot extends BlockEmbed
         wrapper.contentEditable = false;
 
         wrapper.innerHTML = oneLineTrim`
-            <img src="${value.src}" alt="" itemprop="image">
+            <img src="${value.src}" width="${value.width}" height="${value.height}" alt="" itemprop="image">
             <figcaption class="post-form__caption">
                 <textarea placeholder="Optional caption" rows="1"></textarea>
             </figcaption>
@@ -39,6 +39,8 @@ class CustomImageBlot extends BlockEmbed
 
         return {
             src: img.getAttribute('src'),
+            width: img.getAttribute('width'),
+            height: img.getAttribute('height'),
             caption: textarea.value
         };
     }
