@@ -176,4 +176,8 @@ app.use(function(req, res) {
     res.status(404).render('404');
 });
 
+app.use(function(err, req, res, next) {
+    res.status(503).render('service_unavailable');
+});  
+
 module.exports = app;

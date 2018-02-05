@@ -1,17 +1,26 @@
 .error-page {
     width: auto;
-    max-width: 320px;
+    max-width: 420px;
     margin: 0 auto;
+    padding: 0 10px;
     text-align: center;
+    box-sizing: border-box;
 
     &__code {
         color: #ccc;
         font-size: 6em;
-        margin-bottom: .1em;
+        margin-bottom: .5em;
+    }
+
+    @media (max-width: 480px) {
+        &__code {
+            font-size: 5em;
+        }
     }
 
     &__description {
         margin-bottom: 5em;
         color: #ccc;
+        line-height: 1.5;
     }
 }
