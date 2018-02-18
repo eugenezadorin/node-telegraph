@@ -24,5 +24,7 @@ module.exports = {
     fileNameLen: 32,
 
     fileMaxWidth: 1024,
+
+    ampIframePlaceholder: '/img/video_placeholder.png',
     
 };

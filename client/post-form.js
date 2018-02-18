@@ -1,9 +1,14 @@
 import Quill from 'quill';
+import Delta from 'quill-delta';
 import axios from 'axios';
 import debounce from 'debounce';
+import urlValidator from 'valid-url';
 import utils from './utils';
 import icons from './icons';
-import CustomImageBlot from './custom_image_blot';
+import CustomImageBlot from './blots/custom_image';
+import ParagraphEmbedBlot from './blots/paragraph_embed';
+import CustomVideoBlot from './blots/custom_video';
+import Keyboard from './keyboard';
 
 (function(component) {
     if (!component) return;
@@ -17,6 +22,7 @@ import CustomImageBlot from './custom_image_blot';
     const toolbar = component.querySelector('.post-form__toolbar');
     const toolbarMedia = component.querySelector('.post-form__toolbar-media');
     const toolbarMediaImageBtn = toolbarMedia.querySelector('.post-form__toolbar-media-image');
+    const toolbarMediaEmbedBtn = toolbarMedia.querySelector('.post-form__toolbar-media-video');
     const fileInput = component.querySelector('.post-form__file');
     const postCode = component.dataset.postCode;
 
@@ -25,13 +31,17 @@ import CustomImageBlot from './custom_image_blot';
     const autosaveStoryKey = postCode ? 'story_' + postCode : 'latest_story';
 
     Quill.register(CustomImageBlot, true);
+    Quill.register(ParagraphEmbedBlot, true);
+    Quill.register(CustomVideoBlot, true);
 
-    var qIcons = Quill.import('ui/icons');
+    let qIcons = Quill.import('ui/icons');
     qIcons['header'][2] = icons.h2;
     qIcons['header'][3] = icons.h3;
 
     toolbarMedia.querySelector('.post-form__toolbar-media-image').innerHTML = icons.camera;
     toolbarMedia.querySelector('.post-form__toolbar-media-video').innerHTML = icons.play;
+
+    let embedInsertInProgress = false;
 
     const inlineEditorKeyboardBehavior = {
         bindings: {
@@ -61,10 +71,22 @@ import CustomImageBlot from './custom_image_blot';
             editor.on('text-change', function(){
                 setTimeout(function(){
                     toggleToolbarMedia(editor, toolbarMedia);
+                    toggleToolbar(editor, toolbar);
                 }, 0);
             });
 
-            editor.on('selection-change', function() {
+            editor.on('selection-change', function(range, oldRange) {
+                if (embedInsertInProgress) {
+                    if (range) {
+                        const [line] = editor.getLine(range.index);
+                        if ( !(line instanceof ParagraphEmbedBlot) ) {
+                            editor.setSelection(oldRange.index, 0);
+                        }
+                    } else {
+                        editor.setSelection(oldRange.index, 0);
+                        editor.focus();
+                    }
+                }
                 toggleToolbarMedia(editor, toolbarMedia);
                 toggleToolbar(editor, toolbar);
             });
@@ -158,6 +180,83 @@ import CustomImageBlot from './custom_image_blot';
         modules: {
             toolbar: { 
                 container: toolbar 
+            },
+            keyboard: {
+                bindings: {
+                    enter: {
+                        key: Keyboard.keys.ENTER,
+                        handler: function(range, context) {
+                            if (embedInsertInProgress) {
+                                const link = context.prefix.trim() + context.suffix.trim();
+                                if (link.length > 0) 
+                                {
+                                    const leftBorder = range.index - context.offset;
+                                    const rmLength = context.prefix.length + context.suffix.length + 1;
+                                    embedInsertInProgress = false;
+
+                                    if (urlValidator.isWebUri(link)) {
+                                        this.quill.updateContents(new Delta().retain(leftBorder).delete(rmLength));
+                                        this.quill.insertEmbed(leftBorder, 'custom_video', {src: link}, Quill.sources.USER);
+                                        this.quill.setSelection(leftBorder + 1, 0);
+                                        this.quill.focus();
+                                    } else {
+                                        this.quill.insertText(leftBorder, context.prefix + context.suffix);
+                                    }
+                                }
+
+                                return false;
+                            }
+                            return true;
+                        }
+                    },
+                    space: {
+                        key: Keyboard.keys.SPACE,
+                        handler: function() {
+                            return embedInsertInProgress ? false : true;
+                        }
+                    },
+                    escape: {
+                        key: Keyboard.keys.ESCAPE,
+                        handler: function(range, context) {
+                            if (embedInsertInProgress) {
+                                const leftBorder = range.index - context.offset;
+                                const rmLength = context.prefix.length + context.suffix.length + 1;
+                                this.quill.updateContents(new Delta().retain(leftBorder).delete(rmLength));
+                                this.quill.insertText(leftBorder, context.prefix + context.suffix);
+                                embedInsertInProgress = false;
+                            }
+                            return true;
+                        }
+                    },
+                    backspace: {
+                        key: Keyboard.keys.BACKSPACE,
+                        handler: function(range, context) {
+                            if(embedInsertInProgress && context.offset === 0) {
+                                if (context.empty) {
+                                    this.quill.updateContents(new Delta().retain(range.index).delete(1));
+                                    this.quill.insertText(range.index, '\n');
+                                    embedInsertInProgress = false;
+                                } else {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+                    },
+                    delete: {
+                        key: Keyboard.keys.DELETE,
+                        handler: function(range, context) {
+                            if (embedInsertInProgress) {
+                                if (context.empty) {
+                                    embedInsertInProgress = false;
+                                } else if (context.suffix.length == 0) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+                    }
+                }
             }
         }
     }, autosaveStoryKey);
@@ -168,6 +267,15 @@ import CustomImageBlot from './custom_image_blot';
     toolbarMediaImageBtn.addEventListener('click', function(event){
         event.preventDefault();
         fileInput.click();
+    });
+
+    toolbarMediaEmbedBtn.addEventListener('click', function(event){
+        event.preventDefault();
+        if (!embedInsertInProgress) {
+            const range = storyEditor.getSelection(true);
+            storyEditor.insertEmbed(range.index, 'paragraph_embed', {caption: 'Paste your link here and press enter'}, Quill.sources.USER);
+            embedInsertInProgress = true;
+        }
     });
 
     fileInput.addEventListener('change', function(){

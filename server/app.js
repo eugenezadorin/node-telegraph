@@ -161,6 +161,10 @@ app.get('/:slug/amp', function(req, res, next){
     Post.findBySlug(req.params.slug, function(error, post){
         if (post) {
             post.absUrl = req.rootUrl + post.url;
+            post.storyAmp = post.storyAmp.replace(
+                /%amp_iframe_placeholder_src%/g,
+                req.rootUrl + config.ampIframePlaceholder
+            );
             res.render('post_amp', {
                 post: post, 
                 canEdit: post.editable(req.userId),
@@ -176,7 +180,7 @@ app.use(function(req, res) {
     res.status(404).render('404');
 });
 
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res, _next) {
     res.status(503).render('service_unavailable');
 });  
 

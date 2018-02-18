@@ -192,6 +192,36 @@
         }
     }
 
+    .post-form__paragraph-embed {
+        color: rgba(0,0,0,.6);
+        font-style: italic;
+    }
+
+    .post-form__paragraph-embed.empty:before {
+        content: attr(data-placeholder);
+        left: 3px;
+        pointer-events: none;
+        position: absolute;
+    }
+
+    .post-form__video {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 */
+        padding-top: 30px;
+        margin: 2em 0;
+        width: 100%;
+        height: 0; 
+        overflow: hidden;
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
     .ql-container {
         border: none;
         font-family: $font-sans;

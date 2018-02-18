@@ -6,7 +6,7 @@ let BlockEmbed = Quill.import('blots/block/embed');
 class CustomImageBlot extends BlockEmbed
 {
     static create(value) {
-        let wrapper = super.create();
+        const wrapper = super.create();
     
         wrapper.className = 'post-form__picture';
         wrapper.contentEditable = false;
@@ -23,8 +23,8 @@ class CustomImageBlot extends BlockEmbed
             obj.style.height = (2 + obj.scrollHeight) + 'px';
         }
 
-        let textarea = wrapper.querySelector('textarea');
-        let image = wrapper.querySelector('img');
+        const textarea = wrapper.querySelector('textarea');
+        const image = wrapper.querySelector('img');
 
         textarea.value = value.caption;
         textarea.addEventListener('input', () => autosize(textarea));
@@ -34,8 +34,8 @@ class CustomImageBlot extends BlockEmbed
     }
 
     static value(node) {
-        var img = node.querySelector('img');
-        var textarea = node.querySelector('textarea');
+        const img = node.querySelector('img');
+        const textarea = node.querySelector('textarea');
 
         return {
             src: img.getAttribute('src'),

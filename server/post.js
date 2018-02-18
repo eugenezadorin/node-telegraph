@@ -37,13 +37,16 @@ class Post
             allowedTags: [
                 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol', 'li', 
                 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
-                'pre', 'img', 'figure', 'figcaption', 'amp-img'
+                'pre', 'img', 'figure', 'figcaption', 'iframe', 'amp-img', 'amp-iframe'
             ],
             allowedAttributes: {
-                '*': ['href', 'class', 'contenteditable', 'alt', 'src', 'placeholder', 'target', 'spellcheck', 'itemprop', 'width', 'height']
+                '*': [
+                    'href', 'class', 'contenteditable', 'alt', 'src', 'placeholder', 'target', 
+                    'spellcheck', 'itemprop', 'width', 'height', 'allowfullscreen', 'frameborder'
+                ]
             },
             allowedAmpAttributes: {
-                '*': ['href', 'class', 'alt', 'src', 'placeholder', 'target', 'width', 'height', 'layout']
+                '*': ['href', 'class', 'alt', 'src', 'placeholder', 'target', 'width', 'height', 'layout', 'allowfullscreen', 'frameborder', 'sandbox']
             }
         };
     }
@@ -73,9 +76,29 @@ class Post
                             layout: 'responsive',
                         }
                     };
+                },
+                'iframe': function(tagName, attribs) {
+                    return {
+                        tagName: 'amp-iframe',
+                        attribs: {
+                            src: attribs.src,
+                            allowfullscreen: '',
+                            frameborder: '0',
+                            width: '16',
+                            height: '9',
+                            layout: 'responsive',
+                            sandbox: 'allow-scripts allow-same-origin allow-popups',
+                        },
+                        text: '%amp_iframe_placeholder%'
+                    };
                 }
             }
         });
+
+        this.storyAmp = this.storyAmp.replace(
+            /%amp_iframe_placeholder%/g,
+            '<amp-img layout="fill" src="%amp_iframe_placeholder_src%" placeholder></amp-img>'
+        );
 
         const handler = new htmlparser.DomHandler((error, dom) => {
             if (error) return;
